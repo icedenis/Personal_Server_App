@@ -1,0 +1,165 @@
+﻿@page "/author"
+
+@inject IAuthoRepo _repo
+
+
+@if (authorModels == null)
+{
+       <p><em>Loading...</em></p>
+    <br>
+    <Wave />
+}
+else
+{
+<h3>AutorView</h3>
+
+    <BSTable IsResponsive="true" class='table'>
+
+        <thead class="thead-light">
+            <tr>
+                <th>Name</th>
+                <th>Last Name</th>
+               
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var data in authorModels)
+            {
+                <tr>
+                    <td>@data.Firstname</td>
+                    <td>@data.Lastname</td>
+                    <td>
+                        <BSButton ButtonType="ButtonType.Link" Color="Color.None" Class="oi oi-eye text-primary" @onclick="@(async () => await ViewAuthor(data.Id))"></BSButton>
+                        <AuthorizeView>
+                            <Authorized>
+
+                                <NavLink href="@($"/author/edit/{data.Id}")">
+                                    <i class="oi oi-pencil text-warning"></i>
+                                </NavLink>
+                                <BSButton ButtonType="ButtonType.Link" Color="Color.None" Class="oi oi-trash text-danger"></BSButton>
+                                @*<BSButton ButtonType="ButtonType.Link" Color="Color.None" Class="oi oi-trash text-danger" @onclick="@(async () => await DeleteOrganization(organization.Id))"></BSButton>*@
+                            </Authorized>
+                         </AuthorizeView>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+
+    </BSTable>
+
+
+    // View
+<div>
+
+
+    <BSModal @bind-IsOpen="isView" Size="Size.Large" IgnoreEscape="true" IgnoreClickOnBackdrop="true">
+        <BSModalHeader @onclick="CloseModal">@modalTitle</BSModalHeader>
+        <BSModalBody>
+            <div class="col-md-12">
+                @if (isDelete)
+                {
+                    <BSAlert Color="Color.Danger">Please review carefully before deleting.</BSAlert>
+
+                }
+                <hr />
+                <h5>Author Data</h5>
+                <hr />
+                <BSTable IsResponsive="true" class="table">
+                    <tr>
+                        <td>Id</td>
+                        <td>@CurrentAuthor.Id</td>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td>@CurrentAuthor.Firstname</td>
+                    </tr>
+                    <tr>
+                        <td>Type</td>
+                        <td>@CurrentAuthor.Lastname</td>
+                    </tr>
+                    <tr>
+                        <td>Commend</td>
+                        <td>@CurrentAuthor.Bio</td>
+                    </tr>
+                    <tr>
+                        <td>Books</td>
+                        <td>@CurrentAuthor.Books</td>
+                    </tr>
+                </BSTable>
+
+            </div>
+
+        </BSModalBody>
+    </BSModal>
+
+</div>
+}
+
+
+
+
+
+
+@code {
+    private IList<AuthorModel> authorModels;
+
+    protected int CurrentAuthorID{get; set;}
+    protected bool isView { get; set; }
+    protected bool isAdd { get; set; }
+    protected bool isDelete { get; set; }
+    protected string modalTitle { get; set; }
+    protected AuthorModel CurrentAuthor = new AuthorModel
+    {
+        Bio = "",
+        Lastname = "",
+        Firstname = "",
+        Books = null
+    };
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+        await GetAllAuthor();
+
+    }
+
+    public async Task GetAllAuthor()
+    {
+        authorModels = await _repo.GetAll(Endpoint.AuthorEndpoint);
+
+    }
+
+
+    protected async Task ViewAuthor(int AuthorID)
+    {
+
+        this.isView = true;
+        this.modalTitle = "View Author";
+        CurrentAuthor = await _repo.Get(Endpoint.AuthorEndpoint, AuthorID);
+        CurrentAuthorID = CurrentAuthor.Id;
+    }
+
+
+    protected void CloseModal()
+    {
+        CurrentAuthor = new AuthorModel
+        {
+            Bio = "",
+            Lastname = "",
+            Firstname = "",
+            Books = null
+        };
+        CurrentAuthorID = 0;
+        this.isAdd = false;
+        this.isView = false;
+        this.isDelete = false;
+        StateHasChanged();
+    }
+
+
+
+}

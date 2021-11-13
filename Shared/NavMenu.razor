@@ -1,0 +1,93 @@
+﻿
+
+
+<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark" IsFixedTop="true">
+    <BSNavbarBrand Href="/">Blazor Library</BSNavbarBrand>
+    <BSNavbarToggler @onclick="onclick" />
+    <BSCollapse IsOpen="@IsOpen" IsNavbar="true" IsOpenChanged="OpenChanged">
+        <BSNav IsList="true" Class="mr-auto" IsNavbar="true">
+            <AuthorizeView>
+             
+                <BSNavItem>
+                    <BSNavLink href="/">Home</BSNavLink>
+                </BSNavItem>
+
+            </AuthorizeView>
+            <AuthorizeView>
+                <NotAuthorized>
+                    <BSNavItem>
+                        <BSNavLink href="/personal/login">Login</BSNavLink>
+                    </BSNavItem>
+                    <BSNavItem>
+                        <BSNavLink href="/personal/register">Register</BSNavLink>
+                    </BSNavItem>
+
+                </NotAuthorized>
+            </AuthorizeView>
+            <AuthorizeView Roles="Admin">
+                <BSNavItem>
+                    <BSNavLink href="/personal/register">Register new Personal</BSNavLink>
+                </BSNavItem>
+
+            </AuthorizeView>
+            <AuthorizeView Roles="Personal">
+                <BSNavItem>
+                    <BSNavLink href="/">Personal Controls</BSNavLink>
+                </BSNavItem>
+
+            </AuthorizeView>
+
+            <AuthorizeView>
+                <BSNavItem>
+                    <BSNavLink href="/author">Author</BSNavLink>
+                </BSNavItem>
+
+                <BSNavItem>
+                    <BSNavLink IsDisabled="true" Class="mr-sm-2" href="#">@context.User.Identity.Name</BSNavLink>
+                </BSNavItem>
+                <BSNavItem>
+                    <BSNavLink href="/personal/logout">Logout</BSNavLink>
+                </BSNavItem>
+
+            </AuthorizeView>
+
+
+
+        </BSNav>
+
+
+
+    </BSCollapse>
+
+</BSNavbar>
+
+
+
+@code {
+
+
+    private bool IsOpen { get; set; } = true;
+
+    void onclick(MouseEventArgs e)
+    {
+        IsOpen = !IsOpen;
+        StateHasChanged();
+    }
+    void OpenChanged(bool e)
+    {
+        IsOpen = e;
+        StateHasChanged();
+    }
+
+
+
+    // origin
+    //private bool collapseNavMenu = true;
+
+    //private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    //private void ToggleNavMenu()
+    //{
+    //    collapseNavMenu = !collapseNavMenu;
+    //}
+}

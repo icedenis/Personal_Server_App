@@ -1,0 +1,105 @@
+﻿@page "/author/edit/{AuthorID}"
+
+
+@inject IAuthoRepo _repo
+@inject NavigationManager UriHelper
+
+<h3>AuthorUpdate</h3>
+
+@if (CurrentAuthor == null)
+{
+       <p><em>Loading...</em></p>
+    <br>
+    <Wave />
+}
+else {
+<EditForm Model="CurrentAuthor" OnValidSubmit="@UpdateAuthor">
+    <DataAnnotationsValidator />
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label class="control-label">First Name</label>
+            <InputText @bind-Value="CurrentAuthor.Firstname" class="form-control" id="firstname" />
+        </div>
+        <div class="form-group col-md-2">
+            <label class="control-label">Last Name</label>
+            <InputText @bind-Value="CurrentAuthor.Lastname" class="form-control" id="lastname" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="bio">Biography</label>
+        <InputTextArea @bind-Value="CurrentAuthor.Bio" class="form-control" id="bio" />
+    </div>
+    <div class="form-row">
+
+        <div class="form-group col-md-3">
+            <button type="submit" class="btn btn-success">Save</button>
+            <button @onclick="BackTo" class="btn btn-outline-secondary">
+                <span class="oi oi-media-skip-backward"></span>
+                Back
+            </button>
+        </div>
+    </div>
+</EditForm>
+
+
+
+}
+
+
+
+
+
+
+
+@code {
+
+    [Parameter]
+    public string AuthorID { get; set; } = "";
+
+    protected int CurrentAuthorID { get; set; }
+    protected bool isEdit;
+
+    protected string modalTitle { get; set; }
+    private bool isSuccess = true;
+    protected AuthorModel CurrentAuthor = new AuthorModel
+    {
+        Bio = "",
+        Lastname = "",
+        Firstname = "",
+        Books = null
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        int id = Convert.ToInt32(AuthorID);
+        await GetAuthor(id);
+
+
+    }
+
+    protected async Task GetAuthor(int AuthorID)
+    {
+
+        CurrentAuthor = await _repo.Get(Endpoint.AuthorEndpoint, AuthorID);
+        CurrentAuthorID = CurrentAuthor.Id;
+    }
+
+
+
+    protected async Task UpdateAuthor()
+    {
+        isSuccess = await _repo.Update(Endpoint.AuthorEndpoint, CurrentAuthor, CurrentAuthor.Id);
+        if (isSuccess)
+        {
+            //_toastService.ShowWarning("Author Updated Successfully", "");
+            await OnInitializedAsync();
+        }
+
+    }
+    private void BackTo()
+    {
+        UriHelper.NavigateTo("/author");
+    }
+
+
+}

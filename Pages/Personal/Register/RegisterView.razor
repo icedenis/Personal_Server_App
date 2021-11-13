@@ -1,0 +1,71 @@
+﻿@page "/personal/register"
+
+@using Personal_Server_App.Models
+@using Personal_Server_App.Interfaces
+
+@inject IAuthenticationRepo _auth;
+@inject NavigationManager UriHelper;
+
+<h3>RegisterView</h3>
+
+
+<h3 class="card-title">Register</h3>
+
+
+@if (response == false)
+{
+    <div>
+        <p>Something went wrong</p>
+    </div>
+
+}
+
+
+<div class="card-body">
+    <EditForm Model="Model" OnValidSubmit="HandleRegistration">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <InputText Id="email" class="form-control" @bind-Value="Model.Username" />
+            <ValidationMessage For="@(() => Model.Username)" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <InputText Id="password" type="password" class="form-control" @bind-Value="Model.Password" />
+            <ValidationMessage For="@(() => Model.Password)" />
+        </div>
+        <div class="form-group">
+            <label for="confirmpassword">Confirm Password</label>
+            <InputText Id="confirmpassword" type="password" class="form-control" @bind-Value="Model.ConfirmPass" />
+            <ValidationMessage For="@(() => Model.ConfirmPass)" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Save</button>
+
+    </EditForm>
+</div>
+
+
+
+
+
+
+
+@code {
+
+
+    private Register_Personal Model = new Register_Personal();
+    bool response = false;
+
+    private async Task HandleRegistration()
+    {
+        response = await _auth.Register(Model);
+
+        if (response)
+        {
+            UriHelper.NavigateTo("/");
+        }
+
+    }
+
+}

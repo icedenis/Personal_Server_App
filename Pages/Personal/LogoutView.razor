@@ -1,0 +1,22 @@
+﻿@page "/personal/logout"
+
+@using Personal_Server_App.Interfaces
+@inject IAuthenticationRepo _autho;
+@inject NavigationManager UriHelper;
+
+<h3>LogoutView</h3>
+
+
+
+
+
+@code {
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _autho.Logout();
+        UriHelper.NavigateTo("/");
+    }
+
+}
