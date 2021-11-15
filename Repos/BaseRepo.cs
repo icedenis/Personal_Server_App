@@ -64,7 +64,8 @@ namespace Personal_Server_App.Repos
             {
                 return false;
             }
-            requestlink.Content = new StringContent(JsonConvert.SerializeObject(tmp));
+            requestlink.Content = new StringContent(JsonConvert.SerializeObject(tmp)
+            , Encoding.UTF8, "application/json");
             var client = _client.CreateClient();
             HttpResponseMessage responselink = await client.SendAsync(requestlink);
             if (responselink.StatusCode == System.Net.HttpStatusCode.Created)

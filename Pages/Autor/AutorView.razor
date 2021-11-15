@@ -8,10 +8,32 @@
        <p><em>Loading...</em></p>
     <br>
     <Wave />
-}
+}else if(isFailed == true){
+      
+    <BSAlert Color="Color.Danger">Something went wrong </BSAlert>
+
+ }
 else
 {
 <h3>AutorView</h3>
+
+<div class="row mb-3">
+    <div class="col-md-7">
+        <AuthorizeView>
+            <Authorized>
+                <p>
+                    <NavLink href="@($"/author/create")">
+                        <BSButton Class="btn btn-dark">Add Author</BSButton>
+
+                    </NavLink>
+                </p>
+            </Authorized>
+            <NotAuthorized>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</div>
+
 
     <BSTable IsResponsive="true" class='table'>
 
@@ -37,7 +59,7 @@ else
                                 <NavLink href="@($"/author/edit/{data.Id}")">
                                     <i class="oi oi-pencil text-warning"></i>
                                 </NavLink>
-                                <BSButton ButtonType="ButtonType.Link" Color="Color.None" Class="oi oi-trash text-danger"></BSButton>
+                                <BSButton ButtonType="ButtonType.Link" Color="Color.None" Class="oi oi-trash text-danger" @onclick="@(async () => await DeleteAuthor(data.Id))"></BSButton>
                                 @*<BSButton ButtonType="ButtonType.Link" Color="Color.None" Class="oi oi-trash text-danger" @onclick="@(async () => await DeleteOrganization(organization.Id))"></BSButton>*@
                             </Authorized>
                          </AuthorizeView>
@@ -84,14 +106,43 @@ else
                         <td>Commend</td>
                         <td>@CurrentAuthor.Bio</td>
                     </tr>
-                    <tr>
-                        <td>Books</td>
-                        <td>@CurrentAuthor.Books</td>
-                    </tr>
+                  
                 </BSTable>
+      @if (CurrentAuthor.Books == null || CurrentAuthor.Books.Count < 1)
+        {
+            <div class="alert alert-dismissible alert-secondary">
+                No Books for this Author
+            </div>
+        }
+        else
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    <h4>Author's Books</h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var book in CurrentAuthor.Books)
+                    {
+                        <li class="list-group-item">@book.Title - @book.Price </li>
+                    }
+                </ul>
+            </div>
+        }
+
 
             </div>
-
+            <div class="form-group">
+                @if (isDelete) 
+                {
+                     <button type="button" class="btn btn-danger" @onclick="(async () => await RemoveAuthor(CurrentAuthor.Id))">Delete</button>
+                    <button class="btn btn-primary" @onclick="CloseModal">Cancel</button>
+                }                
+               else { 
+                
+                   <button class="btn btn-primary" @onclick="CloseModal">Cancel</button>
+                }
+                
+            </div>
         </BSModalBody>
     </BSModal>
 
@@ -110,6 +161,7 @@ else
     protected bool isView { get; set; }
     protected bool isAdd { get; set; }
     protected bool isDelete { get; set; }
+    protected bool isFailed { get; set; }
     protected string modalTitle { get; set; }
     protected AuthorModel CurrentAuthor = new AuthorModel
     {
@@ -143,6 +195,32 @@ else
         CurrentAuthorID = CurrentAuthor.Id;
     }
 
+    private async Task RemoveAuthor(int AuthorID)
+    {
+        bool isRemoved = await _repo.Delete(Endpoint.AuthorEndpoint, AuthorID);
+        if (isRemoved)
+        {
+
+            CloseModal();
+            await OnParametersSetAsync();
+        }
+        else
+        {
+            isFailed = true;
+        }
+    }
+    private async Task DeleteAuthor(int AuthorID)
+    {
+
+        isDelete = true;
+        this.isView = true;
+        this.modalTitle = "View Author";
+        CurrentAuthor = await _repo.Get(Endpoint.AuthorEndpoint, AuthorID);
+        CurrentAuthorID = CurrentAuthor.Id;
+
+
+    }
+
 
     protected void CloseModal()
     {
@@ -152,11 +230,13 @@ else
             Lastname = "",
             Firstname = "",
             Books = null
+
         };
         CurrentAuthorID = 0;
         this.isAdd = false;
         this.isView = false;
         this.isDelete = false;
+        this.isFailed = false;
         StateHasChanged();
     }
 
