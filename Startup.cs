@@ -44,6 +44,8 @@ namespace Personal_Server_App
             services.AddTransient<IAuthenticationRepo, AuthenticationRepo>();
             // same for intface Iauthor and AuthorRepo
             services.AddTransient<IAuthoRepo, AuthorRepo>();
+            //Book store repo add here
+            services.AddTransient<IBookRepo, BookRepo>();
             // logcalstorage service here
             services.AddBlazoredLocalStorage();
             //here is the Idetitny mdoe token jwt

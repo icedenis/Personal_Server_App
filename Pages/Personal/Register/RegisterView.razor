@@ -12,11 +12,9 @@
 <h3 class="card-title">Register</h3>
 
 
-@if (response == false)
+@if (isFailed == true)
 {
-    <div>
-        <p>Something went wrong</p>
-    </div>
+    <BSAlert Color="Color.Danger">Something went wrong </BSAlert>
 
 }
 
@@ -55,7 +53,9 @@
 
 
     private Register_Personal Model = new Register_Personal();
-    bool response = false;
+
+    protected bool response { get; set; }
+    protected bool isFailed { get; set; }
 
     private async Task HandleRegistration()
     {
@@ -64,6 +64,10 @@
         if (response)
         {
             UriHelper.NavigateTo("/");
+        }
+        else
+        {
+            isFailed = true;
         }
 
     }

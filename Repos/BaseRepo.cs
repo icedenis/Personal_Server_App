@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Personal_Server_App.Interfaces;
 using System.Text;
-
+using Blazored.LocalStorage;
 
 namespace Personal_Server_App.Repos
 {
@@ -15,10 +15,12 @@ namespace Personal_Server_App.Repos
     {
 
         private readonly IHttpClientFactory _client;
+        private readonly ILocalStorageService _localStorage;
 
-        public BaseRepo(IHttpClientFactory client)
+        public BaseRepo(IHttpClientFactory client, ILocalStorageService localStorage)
         {
             _client = client;
+            _localStorage = localStorage;
         }
 
 
