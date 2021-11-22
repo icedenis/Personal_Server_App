@@ -12,7 +12,7 @@
 <br />
 @if (!isSuccess)
 {
-    <p>Something went wrong </p>
+<BSAlert Color="Color.Danger">Something went wrong </BSAlert>
 }
 
 <EditForm Model="Model" OnValidSubmit="HandleCreate">
@@ -23,7 +23,7 @@
         <InputText @bind-Value="Model.Title" class="form-control" id="title" />
     </div>
     <div class="form-group">
-        <label for="isbn">ISBN</label>
+        <label for="isbn">Bar Code(ISBN)</label>
         <InputText @bind-Value="Model.Isbn" class="form-control" id="isbn" />
     </div>
     <div class="form-group">
@@ -52,7 +52,7 @@
         <InputFile OnChange="HandleFileSelection" />
         @if (isInvalidFileType)
         {
-           <p>Somethign went wrong</p>
+             <BSAlert Color="Color.Danger">Something went wrong. See Image Type </BSAlert>
         }
         @if (!string.IsNullOrWhiteSpace(imageDataURL))
         {
@@ -61,11 +61,11 @@
     </div>
     <button class="btn btn-primary" type="submit">
         <span class="oi oi-pencil"></span>
-        Create Book
+        Save
     </button>
     <button @onclick="BackToList" class="btn btn-outline-secondary">
         <span class="oi oi-media-skip-backward"></span>
-        Back To List
+        Back
     </button>
 </EditForm>
 

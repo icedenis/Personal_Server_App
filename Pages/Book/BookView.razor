@@ -15,6 +15,23 @@
 else
 {
 
+    <div class="row mb-3">
+        <div class="col-md-7">
+            <AuthorizeView>
+                <Authorized>
+                    <p>
+                        <NavLink href="@($"/library/create")">
+                            <BSButton Class="btn btn-dark">Add New Book</BSButton>
+
+                        </NavLink>
+                    </p>
+                </Authorized>
+                <NotAuthorized>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+    </div>
+
     <BSTable IsResponsive="true" class='table'>
 
         <thead class="thead-light">
@@ -91,7 +108,7 @@ else
                             <td>@CurrentBook.Year</td>
                         </tr>
                         <tr>
-                            <td>Bar Code Number</td>
+                            <td>Bar Code Number(ISBN)</td>
                             <td>@CurrentBook.Isbn</td>
                         </tr>
 
