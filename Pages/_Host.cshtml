@@ -23,18 +23,18 @@
 </head>
 <body>
     <app>
-            <component type="typeof(App)" render-mode="ServerPrerendered" />
-        </app>
+        <component type="typeof(App)" render-mode="ServerPrerendered" />
+    </app>
     @*<div id="app">
-        <app class="grid">
-            <div>
-                <h2>Loading...</h2>
-                <h3>Please wait.</h3>
-                <component type="typeof(App)" render-mode="ServerPrerendered" />
-            </div>
-            <div class="spinner"> </div>
-        </app>
-    </div>*@
+            <app class="grid">
+                <div>
+                    <h2>Loading...</h2>
+                    <h3>Please wait.</h3>
+                    <component type="typeof(App)" render-mode="ServerPrerendered" />
+                </div>
+                <div class="spinner"> </div>
+            </app>
+        </div>*@
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -63,6 +63,8 @@
     <script src="_content/ChartJs.Blazor/moment-with-locales.min.js" type="text/javascript" language="javascript"></script>
     <script src="_content/ChartJs.Blazor/Chart.min.js" type="text/javascript" language="javascript"></script>
     <script src="_content/ChartJs.Blazor/ChartJsBlazorInterop.js" type="text/javascript" language="javascript"></script>
+    @*Blazor Input Fiel after .net 5.0 blazor has this commponnt build IN*@
+    <script src="_content/BlazorInputFile/inputfile.js"></script>
 
 
 </body>

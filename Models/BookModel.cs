@@ -17,6 +17,6 @@ namespace Personal_Server_App.Models
         public string Image { get; set; }
         public decimal? Price { get; set; }
         public int? AuthorId { get; set; }
-        //public virtual AuthorDTO Author { get; set; }
+        public virtual AuthorModel Author { get; set; }
     }
 }

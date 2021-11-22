@@ -1,5 +1,205 @@
-﻿<h3>BookView</h3>
+﻿@page  "/library"
+
+@inject IBookRepo _repo
+@inject NavigationManager UriHelper
+
+
+<h3>Library</h3>
+
+@if (bookModels == null || bookModels.Count < 1)
+{
+    <p><em>Loading...</em></p>
+    <br>
+    <Wave />
+}
+else
+{
+
+    <BSTable IsResponsive="true" class='table'>
+
+        <thead class="thead-light">
+            <tr>
+                <th>Picture</th>
+                <th>Title</th>
+                <th> Year</th>
+                <th> Price</th>
+                <th>Bar Code</th>
+                <th>Author Name</th>
+
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var data in bookModels)
+            {
+                <tr>
+                    <td>
+                        <img src="/hochladen/@data.Image" alt="No image" style="height:50px;width:50px" />
+                    </td>
+                    <td>@data.Title</td>
+                    <td>@data.Year</td>
+                    <td>@data.Price</td>
+                    <td>@data.Isbn</td>
+                    @if (data.Author == null)
+                    {
+                        <td>No Author for this Book</td>
+                    }
+                    else
+                    {
+                        <td>@data.Author.Firstname @data.Author.Lastname</td>
+                    }
+
+                    <td>
+                        <BSButton ButtonType="ButtonType.Link" Color="Color.None" Class="oi oi-eye text-primary" @onclick="@(async () => await ViewBook(data.Id))"></BSButton>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+
+    </BSTable>
+    //View
+    <div>
+
+        <BSModal @bind-IsOpen="isView" Size="Size.Large" IgnoreEscape="true" IgnoreClickOnBackdrop="true">
+            <BSModalHeader @onclick="CloseModal">@modalTitle</BSModalHeader>
+            <BSModalBody>
+                <div class="col-md-12">
+                    @if (isDelete == true)
+                    {
+                        <BSAlert Color="Color.Danger">Please review carefully before deleting.</BSAlert>
+
+                    }
+                    <hr />
+                    <h5>information</h5>
+                    <hr />
+                    <BSTable IsResponsive="true" class="table">
+                        <tr>
+                            <td>Id</td>
+                            <td>@CurrentBook.Id</td>
+                        </tr>
+
+                        <tr>
+                            <td>Title</td>
+                            <td>@CurrentBook.Title</td>
+                        </tr>
+                        <tr>
+                            <td>Year</td>
+                            <td>@CurrentBook.Year</td>
+                        </tr>
+                        <tr>
+                            <td>Bar Code Number</td>
+                            <td>@CurrentBook.Isbn</td>
+                        </tr>
+
+                        <tr>
+                            <td>Author</td>
+                            @if (CurrentBook.Author == null)
+                            {
+                                <td>No Author for this Book</td>
+                            }
+                        </tr>
+
+
+
+                    </BSTable>
+                    <div class="col-4">
+                        <img src="/hochladen/@CurrentBook.Image" style="height:300px; width:300px" />
+                        @*how to make to euro dont know  https://www.completecsharptutorial.com/csharp-articles/string-format-c-everything-you-need-to-know.php *@
+                        <h3 class="text-center text-info">@string.Format("{0:C}", CurrentBook.Price)</h3>
+                    </div>
+
+                </div>
+
+
+
+            </BSModalBody>
+
+        </BSModal>
+
+
+
+
+    </div>
+
+
+
+
+}
+
+
 
 @code {
+
+
+    protected bool isFailed { get; set; }
+    protected bool isView { get; set; }
+    protected bool isAdd { get; set; }
+    protected bool isDelete { get; set; }
+    protected string modalTitle { get; set; }
+
+    private IList<BookModel> bookModels;
+    protected BookModel CurrentBook = new BookModel
+    {
+        Title = String.Empty,
+        Year = null,
+        Isbn = String.Empty,
+        Summary = String.Empty,
+        Image = String.Empty,
+        Price = null,
+        AuthorId = null,
+        Author = new AuthorModel()
+
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllBook();
+
+    }
+
+    public async Task GetAllBook()
+    {
+        bookModels = await _repo.GetAll(Endpoint.LibraryEndpoint);
+
+    }
+
+    protected async Task ViewBook(int BookID)
+    {
+
+        this.isView = true;
+        this.modalTitle = "View Book";
+        CurrentBook = await _repo.Get(Endpoint.LibraryEndpoint, BookID);
+
+    }
+
+    protected void CloseModal()
+    {
+
+        this.isView = false;
+        this.isDelete = false;
+
+
+        CurrentBook = new BookModel
+        {
+            Title = String.Empty,
+            Year = null,
+            Isbn = String.Empty,
+            Summary = String.Empty,
+            Image = String.Empty,
+            Price = null,
+            AuthorId = null,
+            Author = new AuthorModel()
+
+        };
+
+        StateHasChanged();
+    }
+
+
+
 
 }

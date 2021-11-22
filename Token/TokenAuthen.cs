@@ -44,7 +44,7 @@ namespace Personal_Server_App.Token
                 return new AuthenticationState(user);
 
             }
-            catch(Exception e)
+            catch
             {
                 // i just log everyone out so program dont crash
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));

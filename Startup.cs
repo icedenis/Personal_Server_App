@@ -54,6 +54,9 @@ namespace Personal_Server_App
                 p.GetRequiredService<TokenAuthen>());
             services.AddScoped<JwtSecurityTokenHandler>();
 
+            // here is the Implrementation for filre upload img 
+            services.AddTransient<IHochladen, Hochlade>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
