@@ -24,7 +24,12 @@ namespace Personal_Server_App.Repos
 
         public void RemoveFile(string picName)
         {
-            throw new NotImplementedException();
+            var path = $"{_env.WebRootPath}\\hochladen\\{picName}";
+
+            if (File.Exists(path) == true)
+            {
+                File.Delete(path);
+            }
         }
 
         public async Task UploadFile(IFileListEntry file, string picName)

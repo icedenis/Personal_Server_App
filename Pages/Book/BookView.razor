@@ -2,7 +2,7 @@
 
 @inject IBookRepo _repo
 @inject NavigationManager UriHelper
-
+@inject IHochladen _imgHochladen
 
 <h3>Library</h3>
 
@@ -69,6 +69,16 @@ else
                     <td>
                         <BSButton ButtonType="ButtonType.Link" Color="Color.None" Class="oi oi-eye text-primary" @onclick="@(async () => await ViewBook(data.Id))"></BSButton>
 
+                        <AuthorizeView>
+                            <Authorized>
+
+                                <NavLink href="@($"/library/edit/{data.Id}")">
+                                    <i class="oi oi-pencil text-warning"></i>
+                                </NavLink>
+                                <BSButton ButtonType="ButtonType.Link" Color="Color.None" Class="oi oi-trash text-danger" @onclick="@(async () => await DeleteBook(data.Id))"></BSButton>
+
+                            </Authorized>
+                        </AuthorizeView>
                     </td>
 
                 </tr>
@@ -128,6 +138,19 @@ else
                         @*how to make to euro dont know  https://www.completecsharptutorial.com/csharp-articles/string-format-c-everything-you-need-to-know.php *@
                         <h3 class="text-center text-info">@string.Format("{0:C}", CurrentBook.Price)</h3>
                     </div>
+
+                </div>
+                <div class="form-group">
+                    @if (isDelete)
+                    {
+                        <button type="button" class="btn btn-danger" @onclick="(async () => await RemoveBook(CurrentBook.Id))">Delete</button>
+                                                    <button class="btn btn-primary" @onclick="CloseModal">Cancel</button>
+                                                }
+                                                else
+                                                {
+
+                                                    <button class="btn btn-primary" @onclick="CloseModal">Cancel</button>
+                                                }
 
                 </div>
 
@@ -214,6 +237,36 @@ else
         };
 
         StateHasChanged();
+    }
+
+    private async Task DeleteBook(int BookID)
+    {
+
+        isDelete = true;
+        this.isView = true;
+        this.modalTitle = "Delete Book";
+        CurrentBook = await _repo.Get(Endpoint.LibraryEndpoint, BookID);
+
+
+
+    }
+
+
+    private async Task RemoveBook(int BookID)
+    {
+
+        _imgHochladen.RemoveFile(CurrentBook.Image);
+        bool isRemoved = await _repo.Delete(Endpoint.LibraryEndpoint, BookID);
+        if (isRemoved)
+        {
+
+            CloseModal();
+            await OnInitializedAsync();
+        }
+        else
+        {
+            isFailed = true;
+        }
     }
 
 

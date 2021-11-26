@@ -15,7 +15,7 @@
 <BSAlert Color="Color.Danger">Something went wrong </BSAlert>
 }
 
-<EditForm Model="Model" OnValidSubmit="HandleCreate">
+<EditForm Model="Model" OnValidSubmit="CreateBook">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="form-group">
@@ -49,7 +49,7 @@
     </div>
     <div class="form-group">
         <label for="bookcover">Book Cover Photo</label>
-        <InputFile OnChange="HandleFileSelection" />
+        <InputFile OnChange="IMGSelection" />
         @if (isInvalidFileType)
         {
              <BSAlert Color="Color.Danger">Something went wrong. See Image Type </BSAlert>
@@ -83,7 +83,7 @@
         Authors = await _authorRepo.GetAll(Endpoint.AuthorEndpoint);
     }
 
-    private async Task HandleCreate()
+    private async Task CreateBook()
     {
         if (!isInvalidFileType)
         {
@@ -107,7 +107,7 @@
         }
     }
 
-    private async Task HandleFileSelection(IFileListEntry[] files)
+    private async Task IMGSelection(IFileListEntry[] files)
     {
         file = files.FirstOrDefault();
         if (file != null)
