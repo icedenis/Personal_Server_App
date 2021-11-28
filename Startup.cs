@@ -19,6 +19,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Personal_Server_App.Token;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http;
+using BlazorPro.BlazorSize;
 
 namespace Personal_Server_App
 {
@@ -48,6 +49,8 @@ namespace Personal_Server_App
             services.AddTransient<IBookRepo, BookRepo>();
             // logcalstorage service here
             services.AddBlazoredLocalStorage();
+            //Toasthere
+     
             //here is the Idetitny mdoe token jwt
             services.AddScoped<TokenAuthen>();
             services.AddScoped<AuthenticationStateProvider>(p =>
@@ -56,6 +59,8 @@ namespace Personal_Server_App
 
             // here is the Implrementation for filre upload img 
             services.AddTransient<IHochladen, Hochlade>();
+            //mediaquere lsit https://www.nuget.org/packages/BlazorPro.BlazorSize/
+            services.AddMediaQueryService();
 
         }
 

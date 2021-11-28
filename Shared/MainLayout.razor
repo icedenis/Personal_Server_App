@@ -1,18 +1,25 @@
 ﻿@inherits LayoutComponentBase
 
-<div>
-    <NavMenu />
-</div>
 
 
+<MediaQueryList>
+    <div>
+        <NavMenu />
+    </div>
+
+    <div class="main">
 
 
-<div class="container">
-    @Body
-</div>
+    
+        <div class="content px-4">
+            @Body
+        </div>
+    </div>
+
+</MediaQueryList>
 
 @*<footer class="footer">
-    <div class="container text-center">
-        <span class="text-muted">&copy; FH-Aachen.com 2021</span>
-    </div>
-</footer>*@
+        <div class="container text-center">
+            <span class="text-muted">&copy; FH-Aachen.com 2021</span>
+        </div>
+    </footer>*@
