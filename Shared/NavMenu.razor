@@ -6,13 +6,10 @@
     <BSNavbarToggler @onclick="onclick" />
     <BSCollapse IsOpen="@IsOpen" IsNavbar="true" IsOpenChanged="OpenChanged">
         <BSNav IsList="true" Class="mr-auto" IsNavbar="true">
-            <AuthorizeView>
-
-                <BSNavItem>
-                    <BSNavLink href="/">Home</BSNavLink>
-                </BSNavItem>
-
-            </AuthorizeView>
+         
+            <BSNavItem>
+                <BSNavLink href="/counter">Counter</BSNavLink>
+            </BSNavItem>
             <AuthorizeView>
                 <NotAuthorized>
                     <BSNavItem>

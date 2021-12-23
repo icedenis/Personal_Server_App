@@ -2,6 +2,15 @@
 
 <h1>Counter</h1>
 
+@if (currentCount % 2 == 0)
+{
+    <span style="font-weight:bold">FH-Aaachen</span>
+}
+else
+{
+    <span style="">FH-Aaachen</span>
+}
+
 <p>Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>

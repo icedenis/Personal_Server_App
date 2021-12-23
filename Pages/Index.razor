@@ -5,3 +5,22 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+<div class="col-md-5">
+    <BSImage IsResponsive="true" src=@_apiImage />
+    <h2>API</h2>
+    <p>Investigate our REST API, which you can use to integrate Blazor App</p>
+    <p><a class="btn btn-secondary" href="https://localhost:44371/index.html" target="_blank" role="button">Swagger View</a></p>
+</div>
+
+@*swagger link
+    https://localhost:44371/index.html*@
+
+
+@code{
+
+
+    private string _apiImage = @"..\img\apis.jpg";
+
+
+}
