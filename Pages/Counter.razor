@@ -16,10 +16,12 @@ else
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
+
+    [Parameter] public int AddierenMit { get; set; } = 1;
     private int currentCount = 0;
 
     private void IncrementCount()
     {
-        currentCount++;
+        currentCount += AddierenMit;
     }
 }
